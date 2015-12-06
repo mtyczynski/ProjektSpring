@@ -6,18 +6,20 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import java.util.List;
 
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "car.unsold", query = "Select c from Car c where c.sold = false")
+		@NamedQuery(name = "lekarstwo.unsold", query = "Select c from Lekarstwo c where c.sold = false")
 })
-public class Car {
+public class Lekarstwo {
 
 	private Long id;
 	private String make;
 	private String model;
 	private Boolean sold = false;
 
+	//private List<Osoba> osoba = new List<Osoba>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Long getId() {
@@ -51,4 +53,6 @@ public class Car {
 	public void setSold(Boolean sold) {
 		this.sold = sold;
 	}
+
+
 }

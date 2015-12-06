@@ -3,13 +3,12 @@ package com.example.shdemo.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.shdemo.domain.Lekarstwo;
+import com.example.shdemo.domain.Osoba;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.example.shdemo.domain.Car;
-import com.example.shdemo.domain.Person;
 
 @Component
 @Transactional
@@ -27,93 +26,91 @@ public class SellingMangerHibernateImpl implements SellingManager {
 	}
 	
 	@Override
-	public void addClient(Person person) {
-		person.setId(null);
-		sessionFactory.getCurrentSession().persist(person);
+	public void addClient(Osoba osoba) {
+		osoba.setId(null);
+		sessionFactory.getCurrentSession().persist(osoba);
 	}
 	
-	@Override
-	public void deleteClient(Person person) {
-		person = (Person) sessionFactory.getCurrentSession().get(Person.class,
-				person.getId());
-		
+	//@ride
+	public void deleteClient(Osoba osoba) {
+		osoba = (Osoba) sessionFactory.getCurrentSession().get(Osoba.class,
+				osoba.getId());
 		// lazy loading here
-		for (Car car : person.getCars()) {
-			car.setSold(false);
-			sessionFactory.getCurrentSession().update(car);
+		for (Lekarstwo lekarstwo : osoba.getLekarstwos()) {
+			lekarstwo.setSold(false);
+			sessionFactory.getCurrentSession().update(lekarstwo);
 		}
-		sessionFactory.getCurrentSession().delete(person);
+		sessionFactory.getCurrentSession().delete(osoba);
 	}
 
 	@Override
-	public List<Car> getOwnedCars(Person person) {
-		person = (Person) sessionFactory.getCurrentSession().get(Person.class,
-				person.getId());
+	public List<Lekarstwo> getOwnedCars(Osoba osoba) {
+		osoba = (Osoba) sessionFactory.getCurrentSession().get(Osoba.class,
+				osoba.getId());
 		// lazy loading here - try this code without (shallow) copying
-		List<Car> cars = new ArrayList<Car>(person.getCars());
-		return cars;
+		List<Lekarstwo> lekarstwos = new ArrayList<Lekarstwo>(osoba.getLekarstwos());
+		return lekarstwos;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Person> getAllClients() {
-		return sessionFactory.getCurrentSession().getNamedQuery("person.all")
-				.list();
+	public List<Osoba> getAllClients() {
+		return sessionFactory.getCurrentSession().getNamedQuery("osoba.all")				.list();
 	}
 
 	@Override
-	public Person findClientByPin(String pin) {
-		return (Person) sessionFactory.getCurrentSession().getNamedQuery("person.byPin").setString("pin", pin).uniqueResult();
+	public Osoba findClientByPin(String pin) {
+		return (Osoba) sessionFactory.getCurrentSession().getNamedQuery("osoba.byPin").setString("pin", pin).uniqueResult();
 	}
 
 
 	@Override
-	public Long addNewCar(Car car) {
-		car.setId(null);
-		return (Long) sessionFactory.getCurrentSession().save(car);
+	public Long addNewCar(Lekarstwo lekarstwo) {
+		lekarstwo.setId(null);
+		return (Long) sessionFactory.getCurrentSession().save(lekarstwo);
 	}
 
 	@Override
 	public void sellCar(Long personId, Long carId) {
-		Person person = (Person) sessionFactory.getCurrentSession().get(
-				Person.class, personId);
-		Car car = (Car) sessionFactory.getCurrentSession()
-				.get(Car.class, carId);
-		car.setSold(true);
-		person.getCars().add(car);
+		Osoba osoba = (Osoba) sessionFactory.getCurrentSession().get(
+				Osoba.class, personId);
+		Lekarstwo lekarstwo = (Lekarstwo) sessionFactory.getCurrentSession()
+				.get(Lekarstwo.class, carId);
+		lekarstwo.setSold(true);
+		osoba.getLekarstwos().add(lekarstwo);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Car> getAvailableCars() {
-		return sessionFactory.getCurrentSession().getNamedQuery("car.unsold")
+	public List<Lekarstwo> getAvailableCars() {
+		return sessionFactory.getCurrentSession().getNamedQuery("lekarstwo.unsold")
 				.list();
 	}
 	@Override
-	public void disposeCar(Person person, Car car) {
+	public void disposeCar(Osoba osoba, Lekarstwo lekarstwo) {
 
-		person = (Person) sessionFactory.getCurrentSession().get(Person.class,
-				person.getId());
-		car = (Car) sessionFactory.getCurrentSession().get(Car.class,
-				car.getId());
+		osoba = (Osoba) sessionFactory.getCurrentSession().get(Osoba.class,
+				osoba.getId());
+		lekarstwo = (Lekarstwo) sessionFactory.getCurrentSession().get(Lekarstwo.class,
+				lekarstwo.getId());
 
-		Car toRemove = null;
-		// lazy loading here (person.getCars)
-		for (Car aCar : person.getCars())
-			if (aCar.getId().compareTo(car.getId()) == 0) {
-				toRemove = aCar;
+		Lekarstwo toRemove = null;
+		// lazy loading here (osoba.getLekarstwos)
+		for (Lekarstwo aLekarstwo : osoba.getLekarstwos())
+			if (aLekarstwo.getId().compareTo(lekarstwo.getId()) == 0) {
+				toRemove = aLekarstwo;
 				break;
 			}
 
 		if (toRemove != null)
-			person.getCars().remove(toRemove);
+			osoba.getLekarstwos().remove(toRemove);
 
-		car.setSold(false);
+		lekarstwo.setSold(false);
 	}
 
 	@Override
-	public Car findCarById(Long id) {
-		return (Car) sessionFactory.getCurrentSession().get(Car.class, id);
+	public Lekarstwo findCarById(Long id) {
+		return (Lekarstwo) sessionFactory.getCurrentSession().get(Lekarstwo.class, id);
 	}
 
 }

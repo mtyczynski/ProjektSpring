@@ -19,10 +19,10 @@ import javax.persistence.TemporalType;
 
 @Entity
 @NamedQueries({ 
-	@NamedQuery(name = "person.all", query = "Select p from Person p"),
-	@NamedQuery(name = "person.byPin", query = "Select p from Person p where p.pin = :pin")
+	@NamedQuery(name = "osoba.all", query = "Select p from Osoba p"),
+	@NamedQuery(name = "osoba.byPin", query = "Select p from Osoba p where p.pin = :pin")
 })
-public class Person {
+public class Osoba {
 
 	private Long id;
 
@@ -30,7 +30,7 @@ public class Person {
 	private String pin = "";
 	private Date registrationDate = new Date();
 
-	private List<Car> cars = new ArrayList<Car>();
+	private List<Lekarstwo> lekarstwos = new ArrayList<Lekarstwo>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -66,10 +66,10 @@ public class Person {
 
 	// Be careful here, both with lazy and eager fetch type
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	public List<Car> getCars() {
-		return cars;
+	public List<Lekarstwo> getLekarstwos() {
+		return lekarstwos;
 	}
-	public void setCars(List<Car> cars) {
-		this.cars = cars;
+	public void setLekarstwos(List<Lekarstwo> lekarstwos) {
+		this.lekarstwos = lekarstwos;
 	}
 }

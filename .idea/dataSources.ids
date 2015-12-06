@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="jdbc" uuid="a71f0d69-2d24-4174-a388-928b472392a0">
+    <database-info product="HSQL Database Engine" version="2.3.3" jdbc-version="4.0" driver-name="HSQL Database Engine Driver" driver-version="2.2.4">
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
+    <schema name="PUBLIC" catalog="PUBLIC"/>
+    <table name="LEKARSTWO" schema="PUBLIC" catalog="PUBLIC" type="TABLE">
+      <column name="ID" sqlType="BIGINT" precision="64" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="MAKE" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="MODEL" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SOLD" sqlType="BIT" precision="1" scale="0" nullable="true" jdbcType="-7"/>
+      <primary-key name="SYS_PK_10618" columns="ID"/>
+      <exported-key name="FK687633875038A89A" table="OSOBA_LEKARSTWO" schema="PUBLIC" catalog="PUBLIC" columns="LEKARSTWOS_ID"/>
+    </table>
+    <table name="OSOBA" schema="PUBLIC" catalog="PUBLIC" type="TABLE">
+      <column name="ID" sqlType="BIGINT" precision="64" scale="0" nullable="false" jdbcType="-5" autoIncrement="true"/>
+      <column name="FIRSTNAME" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="PIN" sqlType="VARCHAR" precision="255" scale="0" nullable="false" jdbcType="12"/>
+      <column name="REGISTRATIONDATE" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <primary-key name="SYS_PK_10621" columns="ID"/>
+      <exported-key name="FK68763387B1CEEEB5" table="OSOBA_LEKARSTWO" schema="PUBLIC" catalog="PUBLIC" columns="OSOBA_ID"/>
+    </table>
+    <table name="OSOBA_LEKARSTWO" schema="PUBLIC" catalog="PUBLIC" type="TABLE">
+      <column name="OSOBA_ID" sqlType="BIGINT" precision="64" scale="0" nullable="false" jdbcType="-5"/>
+      <column name="LEKARSTWOS_ID" sqlType="BIGINT" precision="64" scale="0" nullable="false" jdbcType="-5"/>
+      <foreign-key name="FK687633875038A89A" columns="LEKARSTWOS_ID" ref-table="LEKARSTWO" ref-schema="PUBLIC" ref-catalog="PUBLIC" ref-columns="ID" update-rule="3" delete-rule="3" deferrability="2"/>
+      <foreign-key name="FK68763387B1CEEEB5" columns="OSOBA_ID" ref-table="OSOBA" ref-schema="PUBLIC" ref-catalog="PUBLIC" ref-columns="ID" update-rule="3" delete-rule="3" deferrability="2"/>
+    </table>
+  </data-source>
+</component>

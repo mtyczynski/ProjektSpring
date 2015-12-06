@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import com.example.shdemo.domain.Lekarstwo;
+import com.example.shdemo.domain.Osoba;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.example.shdemo.domain.Car;
-import com.example.shdemo.domain.Person;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/beans.xml" })
@@ -39,24 +38,24 @@ public class SellingManagerTest {
 	@Test
 	public void addClientCheck() {
 
-		List<Person> retrievedClients = sellingManager.getAllClients();
+		List<Osoba> retrievedClients = sellingManager.getAllClients();
 
 		// If there is a client with PIN_1 delete it
-		for (Person client : retrievedClients) {
+		for (Osoba client : retrievedClients) {
 			if (client.getPin().equals(PIN_1)) {
 				sellingManager.deleteClient(client);
 			}
 		}
 
-		Person person = new Person();
-		person.setFirstName(NAME_1);
-		person.setPin(PIN_1);
+		Osoba osoba = new Osoba();
+		osoba.setFirstName(NAME_1);
+		osoba.setPin(PIN_1);
 		// ... other properties here
 
 		// Pin is Unique
-		sellingManager.addClient(person);
+		sellingManager.addClient(osoba);
 
-		Person retrievedClient = sellingManager.findClientByPin(PIN_1);
+		Osoba retrievedClient = sellingManager.findClientByPin(PIN_1);
 
 		assertEquals(NAME_1, retrievedClient.getFirstName());
 		assertEquals(PIN_1, retrievedClient.getPin());
@@ -66,16 +65,16 @@ public class SellingManagerTest {
 	@Test
 	public void addCarCheck() {
 
-		Car car = new Car();
-		car.setMake(MAKE_1);
-		car.setModel(MODEL_1);
+		Lekarstwo lekarstwo = new Lekarstwo();
+		lekarstwo.setMake(MAKE_1);
+		lekarstwo.setModel(MODEL_1);
 		// ... other properties here
 
-		Long carId = sellingManager.addNewCar(car);
+		Long carId = sellingManager.addNewCar(lekarstwo);
 
-		Car retrievedCar = sellingManager.findCarById(carId);
-		assertEquals(MAKE_1, retrievedCar.getMake());
-		assertEquals(MODEL_1, retrievedCar.getModel());
+		Lekarstwo retrievedLekarstwo = sellingManager.findCarById(carId);
+		assertEquals(MAKE_1, retrievedLekarstwo.getMake());
+		assertEquals(MODEL_1, retrievedLekarstwo.getModel());
 		// ... check other properties here
 
 	}
@@ -83,27 +82,27 @@ public class SellingManagerTest {
 	@Test
 	public void sellCarCheck() {
 
-		Person person = new Person();
-		person.setFirstName(NAME_2);
-		person.setPin(PIN_2);
+		Osoba osoba = new Osoba();
+		osoba.setFirstName(NAME_2);
+		osoba.setPin(PIN_2);
 
-		sellingManager.addClient(person);
+		sellingManager.addClient(osoba);
 
-		Person retrievedPerson = sellingManager.findClientByPin(PIN_2);
+		Osoba retrievedOsoba = sellingManager.findClientByPin(PIN_2);
 
-		Car car = new Car();
-		car.setMake(MAKE_2);
-		car.setModel(MODEL_2);
+		Lekarstwo lekarstwo = new Lekarstwo();
+		lekarstwo.setMake(MAKE_2);
+		lekarstwo.setModel(MODEL_2);
 
-		Long carId = sellingManager.addNewCar(car);
+		Long carId = sellingManager.addNewCar(lekarstwo);
 
-		sellingManager.sellCar(retrievedPerson.getId(), carId);
+		sellingManager.sellCar(retrievedOsoba.getId(), carId);
 
-		List<Car> ownedCars = sellingManager.getOwnedCars(retrievedPerson);
+		List<Lekarstwo> ownedLekarstwos = sellingManager.getOwnedCars(retrievedOsoba);
 
-		assertEquals(1, ownedCars.size());
-		assertEquals(MAKE_2, ownedCars.get(0).getMake());
-		assertEquals(MODEL_2, ownedCars.get(0).getModel());
+		assertEquals(1, ownedLekarstwos.size());
+		assertEquals(MAKE_2, ownedLekarstwos.get(0).getMake());
+		assertEquals(MODEL_2, ownedLekarstwos.get(0).getModel());
 	}
 
 	// @Test -
